@@ -1,56 +1,55 @@
 // Address Book Class
 class AddressBook {
     constructor() {
-        this.contacts = []; 
+        this.contacts = [];
+    }
+
+    // Regex Patterns
+    namePattern = /^[A-Z][a-zA-Z]{2,}$/;
+    addressPattern = /^[a-zA-Z0-9\s]{2,}$/; 
+    zipPattern = /^[0-9]{6}$/; 
+    phonePattern = /^[6-9][0-9]{9}$/; 
+    emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; 
+    validateContact(firstName, lastName, address, city, state, zip, phoneNumber, email) {
+        if (!this.namePattern.test(firstName)) 
+            throw new Error("Invalid First Name!");
+        if (!this.namePattern.test(lastName)) 
+            throw new Error("Invalid Last Name!");
+        if (!this.addressPattern.test(address)) 
+            throw new Error("Invalid Address!");
+        if (!this.addressPattern.test(city)) 
+            throw new Error("Invalid City!");
+        if (!this.addressPattern.test(state))
+             throw new Error("Invalid State!");
+        if (!this.zipPattern.test(zip)) 
+            throw new Error("Invalid Zip Code!");
+        if (!this.phonePattern.test(phoneNumber)) 
+            throw new Error("Invalid Phone Number!");
+        if (!this.emailPattern.test(email)) 
+            throw new Error("Invalid Email!");
     }
 
     // Add a new contact
     addContact(firstName, lastName, address, city, state, zip, phoneNumber, email) {
-        const contact = {firstName, lastName, address, city, state, zip, phoneNumber, email };
-        this.contacts.push(contact);
-        console.log("Contact added: "+firstName+" " +lastName);
+        try {
+            this.validateContact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+            const contact = { firstName, lastName, address, city, state, zip, phoneNumber, email };
+            this.contacts.push(contact);
+            console.log("Contact added:", firstName, lastName);
+        } catch (error) {
+            console.error("Error adding contact:", error.message);
+        }
     }
 
     // View all contacts
     viewAllContacts() {
-        if (this.contacts.length == 0) {
+        if (this.contacts.length === 0) {
             console.log("No contacts found.");
         } else {
             console.log("All Contacts:");
             this.contacts.forEach((contact, index) => {
-                console.log(
-                    `${index + 1}. ${contact.firstName} ${contact.lastName} - ${contact.email}`
-                );
+                console.log( `${index + 1}. ${contact.firstName} ${contact.lastName} - ${contact.email}` );
             });
-        }
-    }
-
-    // Search for a contact by name
-    searchContactByName(name) {
-        const results = this.contacts.filter(
-            (contact) =>
-                contact.firstName.toLowerCase().includes(name.toLowerCase()) ||
-                contact.lastName.toLowerCase().includes(name.toLowerCase())
-        );
-
-        if (results.length === 0) {
-            console.log(`No contacts found with name: ${name}`);
-        } else {
-            console.log(`Search Results for "${name}":`);
-            results.forEach((contact) => {
-                console.log(`${contact.firstName} ${contact.lastName} - ${contact.email}`);
-            });
-        }
-    }
-
-    // Delete a contact by email
-    deleteContactByEmail(email) {
-        const index = this.contacts.findIndex((contact) => contact.email === email);
-        if (index === -1) {
-            console.log(`No contact found with email: ${email}`);
-        } else {
-            const deletedContact = this.contacts.splice(index, 1)[0];
-            console.log(`Deleted contact: ${deletedContact.firstName} ${deletedContact.lastName}`);
         }
     }
 }
@@ -58,17 +57,9 @@ class AddressBook {
 // Create an instance of AddressBook
 const addressBook = new AddressBook();
 
-// Add some contacts
-addressBook.addContact( "Deepraj", "Lodhi", "jahangirabad", "Bhopal", "MP", "462008", "8878269924", "deeprajlodhi59@gmail.com");
+// Add contacts
+addressBook.addContact("Deepraj", "Lodhi", "Jahangirabad", "Bhopal", "MP", "462008", "8878269924", "deeprajlodhi59@gmail.com");
+addressBook.addContact("Sanjay", "Rajpoot", "MP nagar", "Bhopal", "MP", "462234", "9897654510", "sanjay@cg.com"); // Invalid case
 
 // View all contacts
-addressBook.viewAllContacts();
-
-// Search for a contact by name
-addressBook.searchContactByName("Deepraj");
-
-// Delete a contact by email
-addressBook.deleteContactByEmail("deeprajlodhi59@gmail.com");
-
-// View all contacts after deletion
 addressBook.viewAllContacts();
