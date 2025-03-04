@@ -1,24 +1,47 @@
+// Address Book Manager Class
+class AddressBookManager {
+    constructor() {
+        this.addressBooks = new Map(); // Stores multiple address books
+    }
+
+    // Create a new address book
+    createAddressBook(name) {
+        if (this.addressBooks.has(name)) {
+            console.log(`Address book '${name}' already exists.`);
+        } else {
+            this.addressBooks.set(name, new AddressBook());
+            console.log(`Address book '${name}' created.`);
+        }
+    }
+
+    // Get an address book by name
+    getAddressBook(name) {
+        return this.addressBooks.get(name) || null;
+    }
+}
+
 // Address Book Class
 class AddressBook {
     constructor() {
         this.contacts = [];
     }
-
+    
     // Regex Patterns
     namePattern = /^[A-Z][a-zA-Z]{2,}$/;
-    addressPattern = /^[a-zA-Z0-9\s]{2,}$/; 
-    zipPattern = /^[0-9]{6}$/; 
-    phonePattern = /^[6-9][0-9]{9}$/; 
-    emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; 
+    addressPattern = /^[a-zA-Z0-9\s]{2,}$/;
+    zipPattern = /^[0-9]{6}$/;
+    phonePattern = /^[6-9][0-9]{9}$/;
+    emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
     validateContact(firstName, lastName, address, city, state, zip, phoneNumber, email) {
         if (!this.namePattern.test(firstName)) 
             throw new Error("Invalid First Name!");
-        if (!this.namePattern.test(lastName)) 
-            throw new Error("Invalid Last Name!");
-        if (!this.addressPattern.test(address)) 
-            throw new Error("Invalid Address!");
-        if (!this.addressPattern.test(city)) 
-            throw new Error("Invalid City!");
+        if (!this.namePattern.test(lastName))
+             throw new Error("Invalid Last Name!");
+        if (!this.addressPattern.test(address))
+             throw new Error("Invalid Address!");
+        if (!this.addressPattern.test(city))
+             throw new Error("Invalid City!");
         if (!this.addressPattern.test(state))
              throw new Error("Invalid State!");
         if (!this.zipPattern.test(zip)) 
@@ -47,19 +70,29 @@ class AddressBook {
             console.log("No contacts found.");
         } else {
             console.log("All Contacts:");
-            this.contacts.forEach((contact, index) => {
-                console.log( `${index + 1}. ${contact.firstName} ${contact.lastName} - ${contact.email}` );
-            });
+            console.table(this.contacts);
         }
     }
 }
 
-// Create an instance of AddressBook
-const addressBook = new AddressBook();
+// Create an instance of AddressBookManager
+const manager = new AddressBookManager();
 
-// Add contacts
-addressBook.addContact("Deepraj", "Lodhi", "Jahangirabad", "Bhopal", "MP", "462008", "8878269924", "deeprajlodhi59@gmail.com");
-addressBook.addContact("Sanjay", "Rajpoot", "MP nagar", "Bhopal", "MP", "462234", "9897654510", "sanjay@cg.com"); // Invalid case
+// Create multiple address books
+manager.createAddressBook("Personal");
+manager.createAddressBook("Work");
 
-// View all contacts
-addressBook.viewAllContacts();
+// Get the personal address book and add contacts
+const personalBook = manager.getAddressBook("Personal");
+if (personalBook) {
+    personalBook.addContact("Deepraj", "Lodhi", "Jahangirabad", "Bhopal", "MP", "462008", "8878269924", "deeprajlodhi59@gmail.com");
+    personalBook.addContact("Amit", "Sharma", "Indira Colony", "Delhi", "DL", "110001", "9876543210", "amitsharma@gmail.com");
+    personalBook.viewAllContacts();
+}
+
+// Get the work address book and add contacts
+const workBook = manager.getAddressBook("Work");
+if (workBook) {
+    workBook.addContact("Sanjay", "Rajpoot", "IT Park", "Noida", "UP", "201301", "9123456789", "sanjay@work.com");
+    workBook.viewAllContacts();
+}
