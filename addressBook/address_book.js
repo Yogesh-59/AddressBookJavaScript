@@ -73,6 +73,25 @@ class AddressBook {
             console.table(this.contacts);
         }
     }
+
+    // Find a contact by name
+    findContactByName(name) {
+        return this.contacts.find(contact => 
+            contact.firstName.toLowerCase() === name.toLowerCase() || 
+            contact.lastName.toLowerCase() === name.toLowerCase()
+        );
+    }
+
+    // Edit an existing contact by name
+    editContact(name, updatedDetails) {
+        const contact = this.findContactByName(name);
+        if (contact) {
+            Object.assign(contact, updatedDetails);
+            console.log(`Contact updated: ${contact.firstName} ${contact.lastName}`);
+        } else {
+            console.log(`No contact found with name: ${name}`);
+        }
+    }
 }
 
 // Create an instance of AddressBookManager
@@ -87,6 +106,14 @@ const personalBook = manager.getAddressBook("Personal");
 if (personalBook) {
     personalBook.addContact("Deepraj", "Lodhi", "Jahangirabad", "Bhopal", "MP", "462008", "8878269924", "deeprajlodhi59@gmail.com");
     personalBook.addContact("Amit", "Sharma", "Indira Colony", "Delhi", "DL", "110001", "9876543210", "amitsharma@gmail.com");
+    
+    console.log("\nBefore Editing:");
+    personalBook.viewAllContacts();
+
+    // Edit a contact
+    personalBook.editContact("Deepraj", { phoneNumber: "9998887776", city: "Indore" });
+
+    console.log("\nAfter Editing:");
     personalBook.viewAllContacts();
 }
 
